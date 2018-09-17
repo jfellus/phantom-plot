@@ -68,7 +68,7 @@ function phantom_plot(input) {
 }
 
 var input = {};
-input.csv = fs.read("./data.csv")
+input.csv = fs.read("./test/data.csv")
 input.data = input.csv.split("\n").filter(function(x){ return x.indexOf(",") !== -1;}).map(function(x) { return x.split(",").map(function(x) { return parseFloat(x); })});
 input.data.shift()
 
