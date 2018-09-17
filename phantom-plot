@@ -1,5 +1,5 @@
 #!/bin/bash
 # An easy-to-write plotter outputting SVG, using PhantomJS and D3
-P=`readlink $0`
+P=`readlink -f $0`
 DIR=`dirname $P`
 $DIR/phantomjs $DIR/phantom-plot.js $@
