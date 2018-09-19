@@ -98,20 +98,16 @@ if(system.args[1] === '-h') {
 else if(system.args[1] === "--multiple-files") {
   while(!system.stdin.atEnd()) {
     try {
-      console.log("ouille")
       var line = system.stdin.readLine();
       f = line.split(" ")
       if(f[0] && f[1]) {
         input.x = fs.read(f[0]);
         out = phantom_plot(input);
         fs.write(f[1], out, "w")
+        system.stdout.write("ok\n")
       }
     } catch(e) {
-      console.log("ouille")
-      console.error(e)
-      console.log(e)
-      system.stderr.flush();
-      system.stdout.flush();
+      system.stdout.write(e + "\n")
     }
   }
 }
