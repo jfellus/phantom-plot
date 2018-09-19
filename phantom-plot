@@ -2,4 +2,4 @@
 # An easy-to-write plotter outputting SVG, using PhantomJS and D3
 P=`readlink -f $0`
 DIR=`dirname $P`
-$DIR/phantomjs $DIR/phantom-plot.js $@
+stdbuf -o0 $DIR/phantomjs $DIR/phantom-plot.js $@

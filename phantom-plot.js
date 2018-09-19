@@ -65,6 +65,7 @@ function phantom_plot(input) {
 
     return new XMLSerializer().serializeToString(document.querySelector('svg'))
   }, input);
+  system.stdout.flush();
 }
 
 var input = {};
@@ -97,6 +98,7 @@ if(system.args[1] === '-h') {
 else if(system.args[1] === "--multiple-files") {
   while(!system.stdin.atEnd()) {
     try {
+      console.log("ouille")
       var line = system.stdin.readLine();
       f = line.split(" ")
       if(f[0] && f[1]) {
@@ -104,7 +106,13 @@ else if(system.args[1] === "--multiple-files") {
         out = phantom_plot(input);
         fs.write(f[1], out, "w")
       }
-    } catch(e) { console.error(e)}
+    } catch(e) {
+      console.log("ouille")
+      console.error(e)
+      console.log(e)
+      system.stderr.flush();
+      system.stdout.flush();
+    }
   }
 }
 
