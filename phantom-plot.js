@@ -1,14 +1,19 @@
 // An easy-to-write plotter outputting SVG, using PhantomJS and D3
 
+
 var system = require('system');
 var fs = require('fs')
 var page = require('webpage').create();
+var process = require("child_process")
 
 page.onConsoleMessage = function(msg) { console.log(msg); }
 page.content = '<html><body></body></html>';
 page.injectJs('./d3.v4.min.js');
 
 var PATH = fs.workingDirectory;
+
+function path_ext(f) { return f.substr(f.lastIndexOf('.') + 1) }
+function path_change_ext(f, ext) { return f.substr(0, f.lastIndexOf('.')+1) + ext }
 
 function phantom_plot(input) {
   return page.evaluate(function(input) {
@@ -68,6 +73,10 @@ function phantom_plot(input) {
   system.stdout.flush();
 }
 
+function svg2pdf(i, o) {
+  process.execFile("svg2pdf", [i, o], null, function(err, stdout, stderr){})
+}
+
 var input = {};
 input.csv = fs.read("./test/data.csv")
 input.data = input.csv.split("\n").filter(function(x){ return x.indexOf(",") !== -1;}).map(function(x) { return x.split(",").map(function(x) { return parseFloat(x); })});
@@ -103,7 +112,12 @@ else if(system.args[1] === "--multiple-files") {
       if(f[0] && f[1]) {
         input.x = fs.read(f[0]);
         out = phantom_plot(input);
-        fs.write(f[1], out, "w")
+        fSvg = path_change_ext(f[1], "svg");
+        fs.write(fSvg, out, "w")
+
+        if(path_ext(f[1]) === 'pdf') svg2pdf(fSvg, f[1]);
+
+
         system.stdout.write("ok\n")
       }
     } catch(e) {
